@@ -1,0 +1,16 @@
+#python 
+__pycache__/
+*.py[cod]
+.venv/
+venv
+.ipynb_checkpoints/
+
+#os / editor
+.Ds_Store
+Thumbs.db
+.vscod/
+.idea/
+
+#local experimint outputs
+*.log
+scartch/
