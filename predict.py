@@ -10,6 +10,7 @@ from pathlib import Path
 
 import json
 import tensorflow as tf 
+from PIL import Image
 
 
 IMG_SIZE=160
@@ -24,18 +25,23 @@ def load_class_names(path=CLASS_NAMES_PATH):
 def load_model(path=MODEL_PATH):
     return tf.keras.models.load_model(path)
 
-def process_image(image_path, image_size=IMG_SIZE):
-    image= tf.keras.utils.load_img(
-        image_path, target_size=(image_size, image_size)
-    )
-    array=tf.keras.utils.img_to_array(image) #(160, 160,3)
-    return np.expand_dims(array, axis=0)#(1,160,160, 3)
+def process_pil_image(image, image_size=IMG_SIZE):
+    image = image.convert("RGB").resize((image_size, image_size))
+    array = np.asarray(image, dtype=np.float32)
+    return np.expand_dims(array, axis=0)
 
-def predict_image(model, class_names, image_path):
-    batch  = process_image(image_path)
-    scores = model.predict(batch, verbose=0)[0]
-    index  = int(np.argmax(scores))
-    return class_names[index], float(scores[index]),scores
+def process_image(image_path, image_size=IMG_SIZE):
+    with Image.open(image_path) as image:
+        return process_pil_image(image, image_size)
+def _predict_batch(model, class_names, batch):
+    scores= model.predict(batch, verbose=0)[0]
+    index=int(np.argmax(scores))
+    return class_names[index], float(scores[index]), scores
+
+def predict_image(model,class_names,image_path):
+    return _predict_batch(model, class_names, process_image(image_path))
+def predict_pil_image(model, class_names, image):
+    return _predict_batch(model, class_names,process_pil_image(image))
 
 if __name__=="__main__":
     if len(sys.argv) !=2:
