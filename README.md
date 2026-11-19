@@ -5,7 +5,7 @@ A small web application that classifies an uploaded photograph as a cat or a dog
 ## Project status
 
 - [x] Session 1 — repository, model, inference script
-- [ ] Session 2 — Streamlit web interface
+- [x] Session 2 — Streamlit web interface
 - [ ] Session 3 — polish, documentation, final testing
 
 ## Model

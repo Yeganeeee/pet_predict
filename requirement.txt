@@ -1,3 +1,4 @@
-tensofflow
+tensorflow
 numpy
 pillow
+streamlit
